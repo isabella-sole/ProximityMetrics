@@ -164,7 +164,7 @@ This code is fully ready for:
 ---
 
 
-# Reciprocal Facing Alignment Analysis
+# 2. Reciprocal Facing Alignment Analysis
 
 This repository contains a Python script to analyze reciprocal head orientation between adult and infant during interaction tasks, using 2D facial keypoints extracted from video recordings.
 
