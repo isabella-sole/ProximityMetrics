@@ -11,7 +11,7 @@ The goal is to classify the physical distance between participants into behavior
 
 The input folder must contain multiple `.npz` files with the following structure:
 
-- Each `.npz` file represents one frame for one participant.
+- Each `.npz` file represents one frame for one participant (please take into account that this is the output structure of SMPLer-X).
 - Filenames must follow this convention:
 
 ```
@@ -43,7 +43,7 @@ The input folder must contain multiple `.npz` files with the following structure
 
 ### 2️⃣ 3D Keypoint Processing
 
-- The script loads the `3D_coor_world` array from each `.npz` file (absolute world coordinates).
+- The script loads the `3D_coor_world` array from each `.npz` file (absolute world coordinates in SMPLer-X).
 - It extracts 3 keypoints:
   - **Pelvis** (index `0`)
   - **Left Shoulder** (index `8`)
@@ -176,7 +176,7 @@ The goal is to estimate whether both participants are facing each other during s
 
 The input folder must contain multiple `.npz` files with the following structure:
 
-- Each `.npz` file represents one frame for one participant.
+- Each `.npz` file represents one frame for one participant (please take into account that this is the output structure of SMPLer-X).
 - Filenames must follow this convention:
 
 ```
@@ -212,7 +212,7 @@ The input folder must contain multiple `.npz` files with the following structure
 
 ## 🧮 Methodology
 
-### 1️⃣ Keypoints used (inside `2D_coor`):
+### 1️⃣ Keypoints used (inside `2D_coor` from SMPLer-X):
 
 | Landmark   | Index |
 |------------|-------|
