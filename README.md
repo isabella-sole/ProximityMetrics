@@ -163,7 +163,154 @@ This code is fully ready for:
 
 ---
 
-## 👩‍💻 Author
-Isabella-Sole Bisio
+
+# Reciprocal Facing Alignment Analysis
+
+This repository contains a Python script to analyze reciprocal head orientation between adult and infant during interaction tasks, using 2D facial keypoints extracted from video recordings.
+
+The goal is to estimate whether both participants are facing each other during social interaction.
 
 ---
+
+## 📦 Dataset Structure
+
+The input folder must contain multiple `.npz` files with the following structure:
+
+- Each `.npz` file represents one frame for one participant.
+- Filenames must follow this convention:
+
+```
+{FRAME_NUMBER}_{PARTICIPANT}.npz
+```
+
+- Example:
+
+```
+00001_adult.npz
+00001_kid.npz
+00002_adult.npz
+00003_kid.npz
+00004_adult.npz
+...
+```
+
+- The dataset may contain missing files: some frames may have only adult or only kid files.  
+  These gaps are automatically handled by the script.
+
+---
+
+## 🔎 What the Code Does
+
+- Automatically detects valid frames where both adult and kid files are available.
+- Loads 2D facial keypoints (`2D_coor`) for each participant.
+- Estimates head direction for each participant.
+- Calculates cosine similarity to determine whether each participant is facing the other.
+- Classifies head orientation into behavioral categories.
+- Outputs a full CSV report.
+
+---
+
+## 🧮 Methodology
+
+### 1️⃣ Keypoints used (inside `2D_coor`):
+
+| Landmark   | Index |
+|------------|-------|
+| Nose       | 24 |
+| Left Eye   | 22 |
+| Right Eye  | 23 |
+| Left Ear   | 20 |
+| Right Ear  | 21 |
+
+### 2️⃣ Head Direction Estimation
+
+- Compute midpoint between ears:
+
+```
+ear_midpoint = (left_ear + right_ear) / 2
+```
+
+- Compute facing vector:
+
+```
+facing_vector = nose - ear_midpoint
+```
+
+### 3️⃣ Head Center Position
+
+- Calculate head center as average of 5 facial landmarks:
+
+```
+head_center = mean(nose, left_eye, right_eye, left_ear, right_ear)
+```
+
+### 4️⃣ Reciprocal Facing Comparison
+
+- Compute vector to the other participant:
+
+```
+to_other_vector = head_center_other - head_center_self
+```
+
+- Calculate cosine similarity:
+
+```
+cos_theta = dot(facing_vector, to_other_vector) / (norm(facing_vector) * norm(to_other_vector))
+```
+
+### 5️⃣ Categorization
+
+| Cosine value | Category |
+|---------------|----------|
+| ≥ 0.7 | Facing |
+| 0.3 – 0.7 | Partial |
+| -0.3 – 0.3 | Perpendicular |
+| < -0.3 | Facing Away |
+
+---
+
+## 🚀 How to Use
+
+### 1️⃣ Requirements
+
+- Python 3.8+
+- Install dependencies:
+
+```bash
+pip install numpy pandas
+```
+
+### 2️⃣ Running the script
+
+```bash
+python reciprocal_facing.py /path/to/your/data/folder
+```
+
+### 3️⃣ Output
+
+- The script prints out:
+  - Total valid frames analyzed
+  - The cosine similarities and facing categories for each participant
+
+- A full CSV report `reciprocal_facing.csv` is saved inside the input folder:
+
+| frame | adult_cosine | adult_category | kid_cosine | kid_category | both_facing |
+|-------|--------------|----------------|------------|--------------|-------------|
+| 15    | 0.84         | Facing         | 0.79       | Facing       | True        |
+| 16    | 0.62         | Partial        | 0.70       | Facing       | False       |
+| 17    | 0.92         | Facing         | 0.85       | Facing       | True        |
+
+---
+
+## ✅ Notes
+
+- The script works directly on `2D_coor` (pixel positions).
+- Only frames where both `adult` and `kid` files are present are analyzed.
+- Make sure filenames strictly follow `{frame}_{participant}.npz` convention.
+
+---
+
+## 👩‍💻 Author
+Isabella-Sole Bisio
+---
+
