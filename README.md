@@ -153,15 +153,6 @@ python interaction_zones.py /path/to/your/data/folder --intimate 0.5 --personal 
 
 ---
 
-## ✅ Ready for extension
-
-This code is fully ready for:
-
-- Adding reciprocal facing alignment features (coming next step).
-- Integration into longitudinal studies.
-- Batch processing across sessions.
-
----
 
 
 # 2. Reciprocal Facing Alignment Analysis
